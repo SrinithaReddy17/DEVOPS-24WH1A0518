@@ -1,0 +1,259 @@
+2<!DOCTYPE html>
+<html>
+<head>
+<title>User Registration</title>
+
+<style>
+
+body{
+    font-family:Arial, sans-serif;
+    background:#f2f2f2;
+}
+
+.container{
+    width:500px;
+    margin:30px auto;
+    background:white;
+    padding:20px;
+    border-radius:10px;
+    box-shadow:0 0 10px gray;
+}
+
+h2{
+    text-align:center;
+    color:blue;
+}
+
+label{
+    display:block;
+    margin-top:10px;
+    font-weight:bold;
+}
+
+input,textarea{
+    width:100%;
+    padding:8px;
+    margin-top:5px;
+    box-sizing:border-box;
+}
+
+textarea{
+    resize:none;
+}
+
+.gender{
+    margin-top:10px;
+}
+
+.gender input{
+    width:auto;
+}
+
+button{
+    width:100%;
+    padding:10px;
+    margin-top:20px;
+    background:green;
+    color:white;
+    border:none;
+    font-size:16px;
+    cursor:pointer;
+}
+
+button:hover{
+    background:darkgreen;
+}
+
+#detailsPage{
+    display:none;
+}
+
+.card{
+    border:1px solid #ccc;
+    padding:15px;
+    margin-top:15px;
+    border-radius:8px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="container" id="formPage">
+
+<h2>Registration Form</h2>
+
+<form id="regForm">
+
+<label>First Name *</label>
+<input type="text" id="fname" required>
+
+<label>Last Name</label>
+<input type="text" id="lname" onfocus="checkFirstName()">
+
+<label>Username *</label>
+<input type="text" id="username" required>
+
+<label>Password *</label>
+<input type="password" id="pass" required>
+
+<label>Confirm Password *</label>
+<input type="password" id="cpass" required>
+
+<label>Date of Birth *</label>
+<input type="date" id="dob" required>
+
+<label>Mobile Number</label>
+<input type="tel" id="mobile">
+
+<label>Address</label>
+<textarea id="address" rows="3"></textarea>
+
+<label>Pincode</label>
+<input type="text" id="pincode">
+
+<label>Gender</label>
+
+<div class="gender">
+
+<input type="radio" name="gender" value="Male"> Male
+<input type="radio" name="gender" value="Female"> Female
+<input type="radio" name="gender" value="Other"> Other
+
+</div>
+
+<button type="submit">Register</button>
+
+</form>
+
+</div>
+
+
+<div class="container" id="detailsPage">
+
+<h2>Registration Details</h2>
+
+<div id="output"></div>
+
+<button onclick="newRegistration()">New Registration</button>
+
+</div>
+
+<script>
+
+let registrations=[];
+
+function checkFirstName(){
+
+    let first=document.getElementById("fname").value;
+
+    if(first.trim()==""){
+        alert("Please enter First Name first.");
+        document.getElementById("fname").focus();
+    }
+
+}
+
+document.getElementById("regForm").addEventListener("submit",function(e){
+
+    e.preventDefault();
+
+    let password=document.getElementById("pass").value;
+    let confirm=document.getElementById("cpass").value;
+
+    if(password!=confirm){
+
+        alert("Passwords do not match.");
+        return;
+
+    }
+
+    let gender="";
+
+    let genders=document.getElementsByName("gender");
+
+    for(let i=0;i<genders.length;i++){
+
+        if(genders[i].checked){
+
+            gender=genders[i].value;
+
+        }
+
+    }
+
+    let user={
+
+        fname:document.getElementById("fname").value,
+        lname:document.getElementById("lname").value,
+        username:document.getElementById("username").value,
+        dob:document.getElementById("dob").value,
+        mobile:document.getElementById("mobile").value,
+        address:document.getElementById("address").value,
+        pincode:document.getElementById("pincode").value,
+        gender:gender
+
+    };
+
+    registrations.push(user);
+
+    showDetails();
+
+});
+
+function showDetails(){
+
+    document.getElementById("formPage").style.display="none";
+    document.getElementById("detailsPage").style.display="block";
+
+    let text="";
+
+    for(let i=0;i<registrations.length;i++){
+
+        text+=`
+
+        <div class="card">
+
+        <h3>Registration ${i+1}</h3>
+
+        <b>First Name :</b> ${registrations[i].fname}<br><br>
+
+        <b>Last Name :</b> ${registrations[i].lname}<br><br>
+
+        <b>Username :</b> ${registrations[i].username}<br><br>
+
+        <b>Date of Birth :</b> ${registrations[i].dob}<br><br>
+
+        <b>Mobile :</b> ${registrations[i].mobile}<br><br>
+
+        <b>Address :</b> ${registrations[i].address}<br><br>
+
+        <b>Pincode :</b> ${registrations[i].pincode}<br><br>
+
+        <b>Gender :</b> ${registrations[i].gender}
+
+        </div>
+
+        `;
+
+    }
+
+    document.getElementById("output").innerHTML=text;
+
+}
+
+function newRegistration(){
+
+    document.getElementById("formPage").style.display="block";
+    document.getElementById("detailsPage").style.display="none";
+
+    document.getElementById("regForm").reset();
+
+}
+
+</script>
+
+</body>
+</html>
